@@ -81,7 +81,7 @@
                 </div>
                 <h4 class="text-[0.9vw] font-bold mb-[1vw]">Stable Viewer</h4>
                 <p class="text-[0.7vw] text-zinc-300 leading-relaxed font-light">
-                    Splat controls and panel widths are locked. Scroll to zoom, drag to move. Click the logo for fullscreen.
+                    Splat controls and panel widths are locked. Drag to move. Click the logo for fullscreen.
                 </p>
             </div>
         </div>
@@ -201,19 +201,26 @@
 
                     let text = await response.text();
                     
-                    let imagesHtml = '';
-                    text = text.replace(/\[([^\]]+)\]/g, (match, fileName) => {
-                        if (/\.(jpg|jpeg|png|gif|webp)$/i.test(fileName)) {
+                    let mediaHtml = '';
+                    text = text.replace(/\[([^\]]+)\]/g, (match, content) => {
+                        if (/\.(jpg|jpeg|png|gif|webp)$/i.test(content)) {
                             // 50% width and enabled lightbox for journal images
-                            imagesHtml += `<img src="journal/${folder}/${fileName}" class="w-1/2 mt-[2vw] h-auto rounded-[0.5vw] shadow-2xl border border-zinc-800 cursor-zoom-in" onclick="toggleLightbox(true, this.src)" alt="${fileName}">`;
+                            mediaHtml += `<img src="journal/${folder}/${content}" class="w-1/2 mt-[2vw] h-auto rounded-[0.5vw] shadow-2xl border border-zinc-800 cursor-zoom-in" onclick="toggleLightbox(true, this.src)" alt="${content}">`;
                             return ''; 
+                        } else if (/youtube\.com\/watch\?v=([\w-]+)/i.test(content) || /youtu\.be\/([\w-]+)/i.test(content)) {
+                            // Embed YouTube videos using iframe
+                            let videoId = content.match(/v=([\w-]+)/)?.[1] || content.match(/youtu\.be\/([\w-]+)/)?.[1];
+                            if (videoId) {
+                                mediaHtml += `<iframe class="w-1/2 mt-[2vw] aspect-video rounded-[0.5vw] shadow-2xl border border-zinc-800" src="https://www.youtube.com/embed/${videoId}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+                                return '';
+                            }
                         }
                         return match; 
                     });
 
-                    // Strict 11px font size requested for journal text
+                    // 13px font size requested for journal text to meet in the middle
                     const formattedText = text.trim().split('\n\n').map(p => {
-                        return `<p class="mb-[1vw] text-[11px] text-zinc-300 font-light leading-relaxed whitespace-pre-wrap">${p.trim()}</p>`;
+                        return `<p class="mb-[1vw] text-[13px] text-zinc-300 font-light leading-relaxed whitespace-pre-wrap">${p.trim()}</p>`;
                     }).join('');
 
                     html += `
@@ -223,7 +230,7 @@
                                 ${formattedText}
                             </div>
                             <div class="flex flex-col space-y-[1.5vw]">
-                                ${imagesHtml}
+                                ${mediaHtml}
                             </div>
                         </div>
                     `;
@@ -275,12 +282,6 @@
             inputState.normX = (e.clientX / window.innerWidth) * 2 - 1;
             inputState.normY = (e.clientY / window.innerHeight) * 2 - 1;
         });
-
-        window.addEventListener('wheel', (e) => {
-            const zoomSpeed = inputState.zoomZ * 0.1;
-            inputState.zoomZ += (e.deltaY > 0 ? 1 : -1) * zoomSpeed;
-            inputState.zoomZ = Math.max(0.1, inputState.zoomZ);
-        }, { passive: true });
 
         // Auto-load about.ply on startup
         const loadDefaultModel = () => {
