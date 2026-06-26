@@ -18,25 +18,25 @@
         .nav-link { transition: color 0.2s ease; cursor: pointer; color: #fff; text-decoration: none; }
         .nav-link:hover, .nav-link.active { color: #ff8c00; } 
 
-        /* Timeline (Upgraded Size for 2K Scaling) */
-        .timeline-container { position: relative; width: 70vw; height: 35vw; margin-top: 1vw; }
+        /* Timeline Scaling with Viewport Units (vw) */
+        .timeline-container { position: relative; width: 68vw; height: 37vw; margin-top: 1vw; }
         .timeline-line { position: absolute; top: 50%; left: 0; width: 100%; height: 2px; background: #222; transform: translateY(-50%); }
-        .year-label { position: absolute; font-family: monospace; color: #444; font-size: 0.8vw; top: 52%; transform: translateY(0.5vw); }
+        .year-label { position: absolute; font-family: monospace; color: #444; font-size: 0.75vw; top: 52%; transform: translateY(0.5vw); }
         
-        .game-poster { position: absolute; width: 5.5vw; height: 7.5vw; background-color: #111; background-size: cover; background-position: center; border: 1px solid #222; cursor: pointer; transition: border-color 0.2s; }
+        .game-poster { position: absolute; width: 5vw; height: 7vw; background-color: #111; background-size: cover; background-position: center; border: 1px solid #222; cursor: pointer; transition: border-color 0.2s; }
         .game-poster:hover { border-color: #ff8c00; }
-        .game-label { position: absolute; width: 5.5vw; text-align: center; font-size: 0.6vw; color: #666; bottom: -1.5vw; text-transform: uppercase; letter-spacing: 0.05em; pointer-events: none; }
+        .game-label { position: absolute; width: 5vw; text-align: center; font-size: 0.5vw; color: #666; bottom: -1vw; text-transform: uppercase; letter-spacing: 0.05em; pointer-events: none; }
 
         /* Lightbox */
         #lightbox { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); backdrop-filter: blur(10px); z-index: 1000; align-items: center; justify-content: center; }
         #lightbox.active { display: flex; }
-        .close-btn { position: absolute; top: 2vw; right: 2vw; font-size: 2.5vw; cursor: pointer; color: #666; }
+        .close-btn { position: absolute; top: 2vw; right: 2vw; font-size: 1.7vw; cursor: pointer; color: #666; }
         .close-btn:hover { color: #fff; }
 
         /* Scrollbars */
-        .custom-scrollbar::-webkit-scrollbar { width: 0.4vw; }
+        .custom-scrollbar::-webkit-scrollbar { width: 0.3vw; }
         .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: #333; border-radius: 1vw; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #333; border-radius: 0.5vw; }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #555; }
     </style>
 </head>
@@ -48,19 +48,19 @@
     </div>
 
     <div id="ui-overlay" class="fixed inset-0 flex items-center justify-center">
-        <div class="p-[4vw] border border-zinc-800 rounded-3xl bg-zinc-950 text-center">
-            <h2 class="text-[0.8vw] tracking-[0.4em] text-zinc-500 font-bold mb-[1vw] uppercase">System Loading</h2>
-            <p id="status" class="text-[1vw] text-white font-light">Loading about.ply...</p>
+        <div class="p-[4vw] border border-zinc-800 rounded-[1.5vw] bg-zinc-950 text-center">
+            <h2 class="text-[0.6vw] tracking-[0.4em] text-zinc-500 font-bold mb-[1vw] uppercase">System Ready</h2>
+            <p id="status" class="text-[0.9vw] text-white font-light">Loading about.ply...</p>
         </div>
     </div>
 
-    <div id="main-content" class="fixed inset-0 hidden flex flex-col p-[3vw]">
+    <div id="main-content" class="fixed inset-0 hidden flex flex-col p-[2.5vw]">
         <div class="flex justify-between items-start mb-[2vw]">
             <div>
-                <h1 class="text-[3.5vw] font-bold tracking-tighter leading-none">PETER SKAGER</h1>
-                <p class="text-[1vw] text-zinc-400 mt-[0.5vw] font-light tracking-widest uppercase">Tech Artist</p>
+                <h1 class="text-[3vw] font-bold tracking-tighter leading-none">PETER SKAGER</h1>
+                <p class="text-[0.9vw] text-zinc-400 mt-[0.5vw] font-light tracking-widest uppercase">Tech Artist</p>
             </div>
-            <nav class="flex space-x-[2vw] text-[0.8vw] font-bold tracking-[0.3em] mt-[1vw]">
+            <nav class="flex space-x-[2vw] text-[0.7vw] font-bold tracking-[0.3em] mt-[1vw]">
                 <a class="nav-link active" onclick="switchTab('about')" id="nav-about">ABOUT //</a>
                 <a class="nav-link" onclick="switchTab('work')" id="nav-work">WORK //</a>
                 <a class="nav-link" href="https://peterskager.artstation.com/" target="_blank" id="nav-portfolio">PORTFOLIO //</a>
@@ -70,17 +70,17 @@
 
         <!-- ABOUT VIEW -->
         <div id="about-view" class="flex-1 flex space-x-[3vw] min-h-0 items-center">
-            <div class="w-[22vw] flex items-center justify-center">
+            <div class="w-[24vw] flex items-center justify-center">
                 <img src="about/featured.jpg" onerror="this.onerror=null; this.src='about/Featured.jpg';" class="w-full h-auto rounded-[0.5vw] shadow-2xl cursor-zoom-in" onclick="toggleLightbox(true, this.src)">
             </div>
             <div class="flex-1"></div>
-            <div class="w-[24vw] bg-zinc-950/90 border border-zinc-800 rounded-[0.5vw] p-[2.5vw] overflow-y-auto custom-scrollbar h-full">
-                <div class="flex items-center space-x-[0.5vw] mb-[2.5vw]">
+            <div class="w-[26vw] bg-zinc-950/90 border border-zinc-800 rounded-[0.5vw] p-[2.5vw] overflow-y-auto custom-scrollbar h-full">
+                <div class="flex items-center space-x-[0.8vw] mb-[2.5vw]">
                     <div class="w-[1.5vw] h-[0.75vw] flex flex-col"><div class="flex-1 bg-white"></div><div class="flex-1 bg-orange-600"></div></div>
-                    <span class="text-[0.6vw] tracking-widest uppercase text-zinc-400">Manual Control</span>
+                    <span class="text-[0.5vw] tracking-widest uppercase text-zinc-400">Manual Control</span>
                 </div>
-                <h4 class="text-[1.2vw] font-bold mb-[1vw]">Stable Viewer</h4>
-                <p class="text-[0.9vw] text-zinc-300 leading-relaxed font-light">
+                <h4 class="text-[0.9vw] font-bold mb-[1vw]">Stable Viewer</h4>
+                <p class="text-[0.7vw] text-zinc-300 leading-relaxed font-light">
                     Splat controls and panel widths are locked. Scroll to zoom, drag to move. Click the logo for fullscreen.
                 </p>
             </div>
@@ -116,19 +116,19 @@
                 </div>
             </div>
 
-            <div id="work-panel" class="hidden w-[20vw] bg-zinc-950 border border-zinc-800 rounded-[0.5vw] p-[2vw] overflow-y-auto custom-scrollbar shadow-2xl">
+            <div id="work-panel" class="hidden w-[18vw] bg-zinc-950 border border-zinc-800 rounded-[0.5vw] p-[2vw] overflow-y-auto custom-scrollbar shadow-2xl">
                 <div class="flex justify-between items-start mb-[1.5vw]">
-                    <div class="w-[5vw] h-[7vw] bg-zinc-900 border border-zinc-800 rounded-[0.2vw] flex items-center justify-center text-[0.6vw] text-zinc-600 bg-cover bg-center" id="work-panel-thumbnail">POSTER</div>
-                    <button onclick="closeWorkDetail()" class="text-zinc-500 hover:text-white text-[1.5vw]">✕</button>
+                    <div class="w-[5vw] h-[7vw] bg-zinc-900 border border-zinc-800 rounded-[0.2vw] flex items-center justify-center text-[0.5vw] text-zinc-600 bg-cover bg-center" id="work-panel-thumbnail">POSTER</div>
+                    <button onclick="closeWorkDetail()" class="text-zinc-500 hover:text-white text-[1.2vw]">✕</button>
                 </div>
                 <h2 id="panel-title" class="text-[1.5vw] font-bold mb-[0.5vw] uppercase tracking-tight text-white">Project</h2>
-                <p id="panel-text" class="text-[0.9vw] text-zinc-400 font-light leading-relaxed"></p>
+                <p id="panel-text" class="text-[0.7vw] text-zinc-400 font-light leading-relaxed"></p>
             </div>
         </div>
 
         <!-- JOURNAL VIEW -->
         <div id="journal-view" class="hidden flex-1 min-h-0 w-full overflow-y-auto custom-scrollbar pr-[1vw]">
-            <div id="journal-entries-container" class="max-w-[50vw] mx-auto py-[2vw] space-y-[4vw]">
+            <div id="journal-entries-container" class="max-w-[45vw] mx-auto py-[2vw] space-y-[4vw]">
                 <!-- Journal entries will be injected here by Javascript -->
             </div>
         </div>
@@ -176,10 +176,9 @@
             document.getElementById('panel-title').innerText = id;
             document.getElementById('panel-text').innerText = gameData[id];
             
-            // Set the mini thumbnail in the panel
             const panelThumb = document.getElementById('work-panel-thumbnail');
             panelThumb.style.backgroundImage = `url('work/thumbnails/${id}.jpg')`;
-            panelThumb.innerText = ''; // Hide "POSTER" text if image loads
+            panelThumb.innerText = ''; 
         };
 
         window.closeWorkDetail = () => {
@@ -189,7 +188,7 @@
         let journalLoaded = false;
         async function loadJournalEntries() {
             const container = document.getElementById('journal-entries-container');
-            container.innerHTML = '<div class="text-zinc-500 text-[0.8vw] tracking-widest uppercase text-center">Loading Journal Data...</div>';
+            container.innerHTML = '<div class="text-zinc-500 text-[0.7vw] tracking-widest uppercase text-center">Loading Journal Data...</div>';
             
             let html = '';
             for (const folder of journalFolders) {
@@ -205,12 +204,14 @@
                     let imagesHtml = '';
                     text = text.replace(/\[([^\]]+)\]/g, (match, fileName) => {
                         if (/\.(jpg|jpeg|png|gif|webp)$/i.test(fileName)) {
-                            imagesHtml += `<img src="journal/${folder}/${fileName}" class="mt-[2vw] w-1/2 h-auto rounded-[0.5vw] shadow-2xl border border-zinc-800 cursor-zoom-in" onclick="toggleLightbox(true, this.src)" alt="${fileName}">`;
+                            // 50% width and enabled lightbox for journal images
+                            imagesHtml += `<img src="journal/${folder}/${fileName}" class="w-1/2 mt-[2vw] h-auto rounded-[0.5vw] shadow-2xl border border-zinc-800 cursor-zoom-in" onclick="toggleLightbox(true, this.src)" alt="${fileName}">`;
                             return ''; 
                         }
                         return match; 
                     });
 
+                    // Strict 11px font size requested for journal text
                     const formattedText = text.trim().split('\n\n').map(p => {
                         return `<p class="mb-[1vw] text-[11px] text-zinc-300 font-light leading-relaxed whitespace-pre-wrap">${p.trim()}</p>`;
                     }).join('');
@@ -218,7 +219,7 @@
                     html += `
                         <div class="border-b border-zinc-900 pb-[3vw] mb-[3vw] last:border-0">
                             <h2 class="text-[1.5vw] font-bold tracking-tight text-white mb-[1.5vw] uppercase">${folder}</h2>
-                            <div class="max-w-none">
+                            <div class="prose prose-invert max-w-none">
                                 ${formattedText}
                             </div>
                             <div class="flex flex-col space-y-[1.5vw]">
@@ -232,7 +233,7 @@
             }
             
             if (html === '') {
-                html = '<div class="text-zinc-500 text-[0.8vw] tracking-widest uppercase text-center">No journal entries found. Please configure your journalFolders array.</div>';
+                html = '<div class="text-zinc-500 text-[0.7vw] tracking-widest uppercase text-center">No journal entries found. Please configure your journalFolders array.</div>';
             }
             container.innerHTML = html;
         }
@@ -281,7 +282,7 @@
             inputState.zoomZ = Math.max(0.1, inputState.zoomZ);
         }, { passive: true });
 
-        // Load Default Model automatically
+        // Auto-load about.ply on startup
         const loadDefaultModel = () => {
             const asset = new pc.Asset('about_splat', 'gsplat', { url: 'about/about.ply' });
             app.assets.add(asset);
@@ -291,8 +292,6 @@
                 if(pivot) pivot.destroy();
                 const splat = new pc.Entity();
                 splat.addComponent('gsplat', { asset });
-                
-                // Read boundaries and center the splat mesh
                 const aabb = asset.resource.aabb;
                 splat.setLocalPosition(-aabb.center.x, -aabb.center.y, -aabb.center.z);
                 
@@ -301,14 +300,13 @@
                 pivot.addChild(splat);
                 pivot.setLocalEulerAngles(180, 0, 0);
 
-                // Calculate perfect zoom bounds based on the model radius & camera FOV
+                // Math to set zoom relative to bounding box - adjusted by 0.94 to be 70% larger visually
                 const radius = aabb.halfExtents.length();
                 const fov = camera.camera.fov * pc.math.DEG_TO_RAD;
-                // Reduced the padding multiplier to make the model 70% larger on screen
                 const fitDistance = (radius / Math.sin(fov / 2)) * 0.94; 
                 
                 inputState.zoomZ = fitDistance;
-                camera.setLocalPosition(0, 0, fitDistance); // Snap camera to perfect fit immediately
+                camera.setLocalPosition(0, 0, fitDistance);
 
                 overlay.classList.add('fade-out');
                 mainContent.classList.remove('hidden');
