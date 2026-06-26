@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Peter Skager | Portfolio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { margin: 0; padding: 0; background-color: #000; color: #fff; font-family: 'Inter', sans-serif; overflow: hidden; }
+        canvas { display: block; width: 100vw; height: 100vh; position: absolute; top: 0; left: 0; z-index: 1; transition: opacity 0.5s; }
+        
+        #ui-overlay { transition: opacity 0.5s ease; z-index: 100; background: rgba(0,0,0,0.9); }
+        .fade-out { opacity: 0; pointer-events: none; }
+
+        #main-content { z-index: 10; pointer-events: none; }
+        #main-content * { pointer-events: auto; }
+        .hidden { display: none !important; }
+
+        .nav-link { transition: color 0.2s ease; cursor: pointer; color: #fff; text-decoration: none; }
+        .nav-link:hover, .nav-link.active { color: #ff8c00; } 
+
+        /* Timeline (Upgraded Size for 2K Scaling) */
+        .timeline-container { position: relative; width: 70vw; height: 35vw; margin-top: 1vw; }
+        .timeline-line { position: absolute; top: 50%; left: 0; width: 100%; height: 2px; background: #222; transform: translateY(-50%); }
+        .year-label { position: absolute; font-family: monospace; color: #444; font-size: 0.8vw; top: 52%; transform: translateY(0.5vw); }
+        
+        .game-poster { position: absolute; width: 5.5vw; height: 7.5vw; background-color: #111; background-size: cover; background-position: center; border: 1px solid #222; cursor: pointer; transition: border-color 0.2s; }
+        .game-poster:hover { border-color: #ff8c00; }
+        .game-label { position: absolute; width: 5.5vw; text-align: center; font-size: 0.6vw; color: #666; bottom: -1.5vw; text-transform: uppercase; letter-spacing: 0.05em; pointer-events: none; }
+
+        /* Lightbox */
+        #lightbox { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); backdrop-filter: blur(10px); z-index: 1000; align-items: center; justify-content: center; }
+        #lightbox.active { display: flex; }
+        .close-btn { position: absolute; top: 2vw; right: 2vw; font-size: 2.5vw; cursor: pointer; color: #666; }
+        .close-btn:hover { color: #fff; }
+
+        /* Scrollbars */
+        .custom-scrollbar::-webkit-scrollbar { width: 0.4vw; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #333; border-radius: 1vw; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #555; }
+    </style>
+</head>
+<body>
+
+    <div id="lightbox">
+        <div class="close-btn" onclick="toggleLightbox(false)">✕</div>
+        <img id="lightbox-img" src="" class="max-w-[90vw] max-h-[90vh] object-contain">
+    </div>
+
+    <div id="ui-overlay" class="fixed inset-0 flex items-center justify-center">
+        <div class="p-[4vw] border border-zinc-800 rounded-3xl bg-zinc-950 text-center">
+            <h2 class="text-[0.8vw] tracking-[0.4em] text-zinc-500 font-bold mb-[1vw] uppercase">System Loading</h2>
+            <p id="status" class="text-[1vw] text-white font-light">Loading about.ply...</p>
+        </div>
+    </div>
+
+    <div id="main-content" class="fixed inset-0 hidden flex flex-col p-[3vw]">
+        <div class="flex justify-between items-start mb-[2vw]">
+            <div>
+                <h1 class="text-[3.5vw] font-bold tracking-tighter leading-none">PETER SKAGER</h1>
+                <p class="text-[1vw] text-zinc-400 mt-[0.5vw] font-light tracking-widest uppercase">Tech Artist</p>
+            </div>
+            <nav class="flex space-x-[2vw] text-[0.8vw] font-bold tracking-[0.3em] mt-[1vw]">
+                <a class="nav-link active" onclick="switchTab('about')" id="nav-about">ABOUT //</a>
+                <a class="nav-link" onclick="switchTab('work')" id="nav-work">WORK //</a>
+                <a class="nav-link" href="https://peterskager.artstation.com/" target="_blank" id="nav-portfolio">PORTFOLIO //</a>
+                <a class="nav-link" onclick="switchTab('journal')" id="nav-journal">JOURNAL</a>
+            </nav>
+        </div>
+
+        <!-- ABOUT VIEW -->
+        <div id="about-view" class="flex-1 flex space-x-[3vw] min-h-0 items-center">
+            <div class="w-[22vw] flex items-center justify-center">
+                <img src="about/featured.jpg" onerror="this.onerror=null; this.src='about/Featured.jpg';" class="w-full h-auto rounded-[0.5vw] shadow-2xl cursor-zoom-in" onclick="toggleLightbox(true, this.src)">
+            </div>
+            <div class="flex-1"></div>
+            <div class="w-[24vw] bg-zinc-950/90 border border-zinc-800 rounded-[0.5vw] p-[2.5vw] overflow-y-auto custom-scrollbar h-full">
+                <div class="flex items-center space-x-[0.5vw] mb-[2.5vw]">
+                    <div class="w-[1.5vw] h-[0.75vw] flex flex-col"><div class="flex-1 bg-white"></div><div class="flex-1 bg-orange-600"></div></div>
+                    <span class="text-[0.6vw] tracking-widest uppercase text-zinc-400">Manual Control</span>
+                </div>
+                <h4 class="text-[1.2vw] font-bold mb-[1vw]">Stable Viewer</h4>
+                <p class="text-[0.9vw] text-zinc-300 leading-relaxed font-light">
+                    Splat controls and panel widths are locked. Scroll to zoom, drag to move. Click the logo for fullscreen.
+                </p>
+            </div>
+        </div>
+
+        <!-- WORK VIEW -->
+        <div id="work-view" class="hidden flex-1 flex space-x-[2vw] min-h-0">
+            <div class="flex-1 flex flex-col items-center justify-center overflow-hidden">
+                <div class="timeline-container" id="timeline">
+                    <div class="timeline-line"></div>
+                    <div class="year-label" style="left: 0%;">2014</div>
+                    <div class="year-label" style="left: 28%;">2017</div>
+                    <div class="year-label" style="left: 55%;">2020</div>
+                    <div class="year-label" style="left: 78%;">2022</div>
+                    <div class="year-label" style="left: 95%;">2023</div>
+
+                    <div class="game-poster" style="left: 5%; top: 15%; background-image: url('work/thumbnails/CK2.jpg');" onclick="openWorkDetail('CK2')"><div class="game-label">CK2</div></div>
+                    <div class="game-poster" style="left: 15%; top: 15%; background-image: url('work/thumbnails/HOI4.jpg');" onclick="openWorkDetail('HOI4')"><div class="game-label">HOI4</div></div>
+                    
+                    <div class="game-poster" style="left: 44%; top: 15%; background-image: url('work/thumbnails/S&B.jpg');" onclick="openWorkDetail('S&B')"><div class="game-label">Skull & Bones</div></div>
+                    <div class="game-poster" style="left: 54%; top: 15%; background-image: url('work/thumbnails/ACV.jpg');" onclick="openWorkDetail('ACV')"><div class="game-label">AC Valhalla</div></div>
+                    
+                    <div class="game-poster" style="left: 78%; top: 15%; background-image: url('work/thumbnails/Fable.jpg');" onclick="openWorkDetail('Fable')"><div class="game-label">Fable</div></div>
+
+                    <div class="game-poster" style="left: 5%; top: 58%; background-image: url('work/thumbnails/EU4.jpg');" onclick="openWorkDetail('EU4')"><div class="game-label">EU4</div></div>
+                    <div class="game-poster" style="left: 15%; top: 58%; background-image: url('work/thumbnails/Stellaris.jpg');" onclick="openWorkDetail('Stellaris')"><div class="game-label">Stellaris</div></div>
+                    
+                    <div class="game-poster" style="left: 38%; top: 58%; background-image: url('work/thumbnails/SS.jpg');" onclick="openWorkDetail('SS')"><div class="game-label">Suicide Squad</div></div>
+                    <div class="game-poster" style="left: 48%; top: 58%; background-image: url('work/thumbnails/Redfall.jpg');" onclick="openWorkDetail('Redfall')"><div class="game-label">Redfall</div></div>
+                    <div class="game-poster" style="left: 58%; top: 58%; background-image: url('work/thumbnails/CP2077.jpg');" onclick="openWorkDetail('CP2077')"><div class="game-label">Cyberpunk</div></div>
+                    
+                    <div class="game-poster" style="left: 90%; top: 58%; background-image: url('work/thumbnails/EV.jpg');" onclick="openWorkDetail('EV')"><div class="game-label">Eve Vanguard</div></div>
+                </div>
+            </div>
+
+            <div id="work-panel" class="hidden w-[20vw] bg-zinc-950 border border-zinc-800 rounded-[0.5vw] p-[2vw] overflow-y-auto custom-scrollbar shadow-2xl">
+                <div class="flex justify-between items-start mb-[1.5vw]">
+                    <div class="w-[5vw] h-[7vw] bg-zinc-900 border border-zinc-800 rounded-[0.2vw] flex items-center justify-center text-[0.6vw] text-zinc-600 bg-cover bg-center" id="work-panel-thumbnail">POSTER</div>
+                    <button onclick="closeWorkDetail()" class="text-zinc-500 hover:text-white text-[1.5vw]">✕</button>
+                </div>
+                <h2 id="panel-title" class="text-[1.5vw] font-bold mb-[0.5vw] uppercase tracking-tight text-white">Project</h2>
+                <p id="panel-text" class="text-[0.9vw] text-zinc-400 font-light leading-relaxed"></p>
+            </div>
+        </div>
+
+        <!-- JOURNAL VIEW -->
+        <div id="journal-view" class="hidden flex-1 min-h-0 w-full overflow-y-auto custom-scrollbar pr-[1vw]">
+            <div id="journal-entries-container" class="max-w-[50vw] mx-auto py-[2vw] space-y-[4vw]">
+                <!-- Journal entries will be injected here by Javascript -->
+            </div>
+        </div>
+    </div>
+
+    <canvas id="canvas"></canvas>
+
+    <script type="importmap"> { "imports": { "playcanvas": "https://esm.run/playcanvas" } } </script>
+
+    <script type="module">
+        import * as pc from 'playcanvas';
+
+        // ---------------------------------------------------------
+        // JOURNAL CONFIGURATION
+        // ---------------------------------------------------------
+        const journalFolders = [
+            'Toast',
+            'entry2'
+        ];
+
+        const gameData = {
+            'CK2': 'Pipeline development for character rendering and grand strategy UI components.',
+            'HOI4': 'Supported world map shader development and unit asset optimization.',
+            'S&B': 'Contributed to ship material systems and environmental tech art during development.',
+            'ACV': 'Optimized landscape systems and technical standards for high-fidelity Viking environments.',
+            'Fable': 'Engaged in the development of magical VFX pipelines and character tech art.',
+            'EU4': 'Early-career technical support focusing on map asset integration and UI performance.',
+            'Stellaris': 'Developed automated asset pipelines for procedural space entities and ships.',
+            'SS': 'Worked on tech art for the Metropolis environment and hero character shaders.',
+            'Redfall': 'Contributed to stylized atmospheric lighting and vampire disintegration effects.',
+            'CP2077': 'Technical art focus on Night City lighting and advanced material systems.',
+            'EV': 'Planetary shader systems and combat VFX for the EVE universe.'
+        };
+
+        window.toggleLightbox = (show, imgSrc) => { 
+            const lb = document.getElementById('lightbox');
+            lb.classList.toggle('active', show); 
+            if (show && imgSrc) {
+                document.getElementById('lightbox-img').src = imgSrc;
+            }
+        };
+
+        window.openWorkDetail = (id) => {
+            document.getElementById('work-panel').classList.remove('hidden');
+            document.getElementById('panel-title').innerText = id;
+            document.getElementById('panel-text').innerText = gameData[id];
+            
+            // Set the mini thumbnail in the panel
+            const panelThumb = document.getElementById('work-panel-thumbnail');
+            panelThumb.style.backgroundImage = `url('work/thumbnails/${id}.jpg')`;
+            panelThumb.innerText = ''; // Hide "POSTER" text if image loads
+        };
+
+        window.closeWorkDetail = () => {
+            document.getElementById('work-panel').classList.add('hidden');
+        };
+
+        let journalLoaded = false;
+        async function loadJournalEntries() {
+            const container = document.getElementById('journal-entries-container');
+            container.innerHTML = '<div class="text-zinc-500 text-[0.8vw] tracking-widest uppercase text-center">Loading Journal Data...</div>';
+            
+            let html = '';
+            for (const folder of journalFolders) {
+                try {
+                    let response = await fetch(`journal/${folder}/entry.txt`);
+                    if (!response.ok) {
+                        response = await fetch(`journal/${folder}/Entry.txt`); 
+                    }
+                    if (!response.ok) continue;
+
+                    let text = await response.text();
+                    
+                    let imagesHtml = '';
+                    text = text.replace(/\[([^\]]+)\]/g, (match, fileName) => {
+                        if (/\.(jpg|jpeg|png|gif|webp)$/i.test(fileName)) {
+                            imagesHtml += `<img src="journal/${folder}/${fileName}" class="mt-[2vw] w-1/2 h-auto rounded-[0.5vw] shadow-2xl border border-zinc-800 cursor-zoom-in" onclick="toggleLightbox(true, this.src)" alt="${fileName}">`;
+                            return ''; 
+                        }
+                        return match; 
+                    });
+
+                    const formattedText = text.trim().split('\n\n').map(p => {
+                        return `<p class="mb-[1vw] text-[11px] text-zinc-300 font-light leading-relaxed whitespace-pre-wrap">${p.trim()}</p>`;
+                    }).join('');
+
+                    html += `
+                        <div class="border-b border-zinc-900 pb-[3vw] mb-[3vw] last:border-0">
+                            <h2 class="text-[1.5vw] font-bold tracking-tight text-white mb-[1.5vw] uppercase">${folder}</h2>
+                            <div class="max-w-none">
+                                ${formattedText}
+                            </div>
+                            <div class="flex flex-col space-y-[1.5vw]">
+                                ${imagesHtml}
+                            </div>
+                        </div>
+                    `;
+                } catch (e) {
+                    console.error(`Failed to load journal entry from ${folder}:`, e);
+                }
+            }
+            
+            if (html === '') {
+                html = '<div class="text-zinc-500 text-[0.8vw] tracking-widest uppercase text-center">No journal entries found. Please configure your journalFolders array.</div>';
+            }
+            container.innerHTML = html;
+        }
+
+        const canvas = document.getElementById('canvas');
+        const overlay = document.getElementById('ui-overlay');
+        const mainContent = document.getElementById('main-content');
+        const inputState = { normX: 0, normY: 0, zoomZ: 5 }; 
+        let pivot = null;
+
+        window.switchTab = (tab) => {
+            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+            const activeNav = document.getElementById(`nav-${tab}`);
+            if (activeNav) activeNav.classList.add('active');
+
+            document.getElementById('about-view').classList.toggle('hidden', tab !== 'about');
+            document.getElementById('work-view').classList.toggle('hidden', tab !== 'work');
+            document.getElementById('journal-view').classList.toggle('hidden', tab !== 'journal');
+            
+            canvas.style.opacity = tab === 'about' ? '1' : '0.1';
+            if(pivot) pivot.enabled = (tab === 'about');
+
+            if (tab === 'journal' && !journalLoaded) {
+                loadJournalEntries();
+                journalLoaded = true;
+            }
+        };
+
+        const app = new pc.Application(canvas, {});
+        app.setCanvasFillMode(pc.FILLMODE_FILL_WINDOW);
+        app.setCanvasResolution(pc.RESOLUTION_AUTO);
+        app.start();
+
+        const camera = new pc.Entity();
+        camera.addComponent('camera', { clearColor: new pc.Color(0,0,0) });
+        app.root.addChild(camera);
+
+        window.addEventListener('mousemove', (e) => {
+            inputState.normX = (e.clientX / window.innerWidth) * 2 - 1;
+            inputState.normY = (e.clientY / window.innerHeight) * 2 - 1;
+        });
+
+        window.addEventListener('wheel', (e) => {
+            const zoomSpeed = inputState.zoomZ * 0.1;
+            inputState.zoomZ += (e.deltaY > 0 ? 1 : -1) * zoomSpeed;
+            inputState.zoomZ = Math.max(0.1, inputState.zoomZ);
+        }, { passive: true });
+
+        // Load Default Model automatically
+        const loadDefaultModel = () => {
+            const asset = new pc.Asset('about_splat', 'gsplat', { url: 'about/about.ply' });
+            app.assets.add(asset);
+            app.assets.load(asset);
+            
+            asset.ready(() => {
+                if(pivot) pivot.destroy();
+                const splat = new pc.Entity();
+                splat.addComponent('gsplat', { asset });
+                
+                // Read boundaries and center the splat mesh
+                const aabb = asset.resource.aabb;
+                splat.setLocalPosition(-aabb.center.x, -aabb.center.y, -aabb.center.z);
+                
+                pivot = new pc.Entity();
+                app.root.addChild(pivot);
+                pivot.addChild(splat);
+                pivot.setLocalEulerAngles(180, 0, 0);
+
+                // Calculate perfect zoom bounds based on the model radius & camera FOV
+                const radius = aabb.halfExtents.length();
+                const fov = camera.camera.fov * pc.math.DEG_TO_RAD;
+                // Reduced the padding multiplier to make the model 70% larger on screen
+                const fitDistance = (radius / Math.sin(fov / 2)) * 0.94; 
+                
+                inputState.zoomZ = fitDistance;
+                camera.setLocalPosition(0, 0, fitDistance); // Snap camera to perfect fit immediately
+
+                overlay.classList.add('fade-out');
+                mainContent.classList.remove('hidden');
+            });
+
+            asset.on('error', (err) => {
+                document.getElementById('status').innerText = "Failed to load about/about.ply";
+                console.error("Playcanvas load error:", err);
+            });
+        };
+
+        // Initialize Loading
+        loadDefaultModel();
+
+        app.on('update', (dt) => {
+            camera.setLocalPosition(0, 0, pc.math.lerp(camera.getLocalPosition().z, inputState.zoomZ, dt * 10));
+            if (pivot && pivot.enabled) {
+                const targetQuat = new pc.Quat().setFromEulerAngles(180 + (inputState.normY * 8), inputState.normX * 8, 0);
+                pivot.setRotation(new pc.Quat().slerp(pivot.getRotation(), targetQuat, dt * 5));
+                pivot.setLocalPosition(pc.math.lerp(pivot.getLocalPosition().x, -inputState.normX * 0.3, dt * 5), pc.math.lerp(pivot.getLocalPosition().y, inputState.normY * 0.3, dt * 5), 0);
+            }
+        });
+
+        window.addEventListener('resize', () => app.resizeCanvas());
+    </script>
+</body>
+</html>
