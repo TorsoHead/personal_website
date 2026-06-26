@@ -205,14 +205,14 @@
                     let imagesHtml = '';
                     text = text.replace(/\[([^\]]+)\]/g, (match, fileName) => {
                         if (/\.(jpg|jpeg|png|gif|webp)$/i.test(fileName)) {
-                            imagesHtml += `<img src="journal/${folder}/${fileName}" class="mt-[2vw] max-w-full h-auto rounded-[0.5vw] shadow-2xl border border-zinc-800" alt="${fileName}">`;
+                            imagesHtml += `<img src="journal/${folder}/${fileName}" class="mt-[2vw] w-1/2 h-auto rounded-[0.5vw] shadow-2xl border border-zinc-800 cursor-zoom-in" onclick="toggleLightbox(true, this.src)" alt="${fileName}">`;
                             return ''; 
                         }
                         return match; 
                     });
 
                     const formattedText = text.trim().split('\n\n').map(p => {
-                        return `<p class="mb-[1vw] text-[1vw] text-zinc-300 font-light leading-relaxed whitespace-pre-wrap">${p.trim()}</p>`;
+                        return `<p class="mb-[1vw] text-[11px] text-zinc-300 font-light leading-relaxed whitespace-pre-wrap">${p.trim()}</p>`;
                     }).join('');
 
                     html += `
@@ -304,8 +304,8 @@
                 // Calculate perfect zoom bounds based on the model radius & camera FOV
                 const radius = aabb.halfExtents.length();
                 const fov = camera.camera.fov * pc.math.DEG_TO_RAD;
-                // Multiplied by 1.6 to give padding and fit nicely between the left/right UI panels
-                const fitDistance = (radius / Math.sin(fov / 2)) * 1.6; 
+                // Reduced the padding multiplier to make the model 70% larger on screen
+                const fitDistance = (radius / Math.sin(fov / 2)) * 0.94; 
                 
                 inputState.zoomZ = fitDistance;
                 camera.setLocalPosition(0, 0, fitDistance); // Snap camera to perfect fit immediately
