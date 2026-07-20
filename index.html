@@ -2,6 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Peter Skager | Portfolio</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
@@ -75,9 +76,11 @@
             </div>
             <div class="flex-1"></div>
             <div class="w-[26vw] bg-zinc-950/90 border border-zinc-800 rounded-[0.5vw] p-[2.5vw] overflow-y-auto custom-scrollbar h-full">
-                <div class="flex items-center space-x-[0.8vw] mb-[2.5vw]">
-                    <div class="w-[1.5vw] h-[0.75vw] flex flex-col"><div class="flex-1 bg-white"></div><div class="flex-1 bg-orange-600"></div></div>
-                    <span class="text-[0.5vw] tracking-widest uppercase text-zinc-400">Manual Control</span>
+                <div class="mb-[2.5vw]">
+                    <a href="CV.pdf" download="CV.pdf" class="inline-flex items-center space-x-[0.8vw] px-[1vw] py-[0.5vw] bg-zinc-900 border border-zinc-700 hover:border-orange-500 rounded-[0.3vw] transition-all cursor-pointer text-white no-underline group w-max shadow-lg">
+                        <svg class="w-[1vw] h-[1vw] text-zinc-400 group-hover:text-orange-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                        <span class="text-[0.6vw] tracking-widest uppercase font-bold text-zinc-300 group-hover:text-white transition-colors">Download CV</span>
+                    </a>
                 </div>
                 <h4 class="text-[0.9vw] font-bold mb-[1vw]">Stable Viewer</h4>
                 <p class="text-[0.7vw] text-zinc-300 leading-relaxed font-light">
@@ -150,7 +153,7 @@
         ];
 
         const gameData = {
-            'CK2': 'Went from embedded QA to designer over a period of roughly three years. I&apos;ve always loved emergent gameplay systems and working on structured emergent narratives was a dream come true.',
+            'CK2': 'Went from embedded QA to designer over a period of roughly three years. I\'ve always loved emergent gameplay systems and working on structured emergent narratives was a dream come true.',
             'HOI4': 'QA from conception to post release.',
             'S&B': 'Contributed to ship material systems and environmental tech art during development.',
             'ACV': 'Optimized landscape systems and technical standards for high-fidelity Viking environments.',
@@ -200,22 +203,30 @@
                     if (!response.ok) continue;
 
                     let text = await response.text();
-                    
                     let mediaHtml = '';
+
+                    // 1. Process bracketed tags first (e.g., [image.jpg] or [youtube_url])
                     text = text.replace(/\[([^\]]+)\]/g, (match, content) => {
                         if (/\.(jpg|jpeg|png|gif|webp)$/i.test(content)) {
-                            // 50% width and enabled lightbox for journal images
                             mediaHtml += `<img src="journal/${folder}/${content}" class="w-1/2 mt-[2vw] h-auto rounded-[0.5vw] shadow-2xl border border-zinc-800 cursor-zoom-in" onclick="toggleLightbox(true, this.src)" alt="${content}">`;
                             return ''; 
-                        } else if (/youtube\.com\/watch\?v=([\w-]+)/i.test(content) || /youtu\.be\/([\w-]+)/i.test(content)) {
-                            // Embed YouTube videos using iframe
-                            let videoId = content.match(/v=([\w-]+)/)?.[1] || content.match(/youtu\.be\/([\w-]+)/)?.[1];
+                        } else if (/(?:youtube\.com\/watch\?v=|youtu\.be\/)([\w-]+)/i.test(content)) {
+                            let videoId = content.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([\w-]+)/i)?.[1];
                             if (videoId) {
                                 mediaHtml += `<iframe class="w-1/2 mt-[2vw] aspect-video rounded-[0.5vw] shadow-2xl border border-zinc-800" src="https://www.youtube.com/embed/${videoId}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
                                 return '';
                             }
                         }
                         return match; 
+                    });
+
+                    // Process raw YouTube links anywhere in the remaining text
+                    const rawYtRegex = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/watch\?v=|youtu\.be\/)([\w-]+)(?:\S*)/gi;
+                    text = text.replace(rawYtRegex, (match, videoId) => {
+                        if (videoId) {
+                            mediaHtml += `<iframe class="w-1/2 mt-[2vw] aspect-video rounded-[0.5vw] shadow-2xl border border-zinc-800" src="https://www.youtube.com/embed/${videoId}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+                        }
+                        return ''; // Removes the raw link from the paragraph body
                     });
 
                     // 13px font size requested for journal text to meet in the middle
@@ -301,7 +312,6 @@
                 pivot.addChild(splat);
                 pivot.setLocalEulerAngles(180, 0, 0);
 
-                // Math to set zoom relative to bounding box - adjusted by 0.94 to be 70% larger visually
                 const radius = aabb.halfExtents.length();
                 const fov = camera.camera.fov * pc.math.DEG_TO_RAD;
                 const fitDistance = (radius / Math.sin(fov / 2)) * 0.94; 
