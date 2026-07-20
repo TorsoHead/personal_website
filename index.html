@@ -42,8 +42,8 @@
 </head>
 <body>
 
-    <div id="lightbox" class="cursor-pointer" onclick="toggleLightbox(false)">
-        <div class="close-btn">✕</div>
+    <div id="lightbox">
+        <div class="close-btn" onclick="toggleLightbox(false)">✕</div>
         <img id="lightbox-img" src="" class="max-w-[90vw] max-h-[90vh] object-contain">
     </div>
 
@@ -76,12 +76,12 @@
             <div class="flex-1"></div>
             <div class="w-[26vw] bg-zinc-950/90 border border-zinc-800 rounded-[0.5vw] p-[2.5vw] overflow-y-auto custom-scrollbar h-full">
                 <div class="flex items-center space-x-[0.8vw] mb-[2.5vw]">
-                    <div class="w-[1.5vw] h-[0.75vw] flex flex-col"><div class="flex-1 bg-blue-500"></div><div class="flex-1 bg-yellow-500"></div></div>
+                    <div class="w-[1.5vw] h-[0.75vw] flex flex-col"><div class="flex-1 bg-white"></div><div class="flex-1 bg-orange-600"></div></div>
                     <span class="text-[0.5vw] tracking-widest uppercase text-zinc-400">Manual Control</span>
                 </div>
-                <h4 class="text-[0.9vw] font-bold mb-[1vw]">London//Stockholm</h4>
+                <h4 class="text-[0.9vw] font-bold mb-[1vw]">Stable Viewer</h4>
                 <p class="text-[0.7vw] text-zinc-300 leading-relaxed font-light">
-                    Hi! I'm Peter.<br>I'm a tech artist with 10+ years in the industry making cinematic quality AAA games and developing next generation pipelines.<br>As a gamer, I think tech art should help to serve the fun and awe of the game. Who wouldn't want to make their game cooler?
+                    Splat controls and panel widths are locked. Drag to move. Click the logo for fullscreen.
                 </p>
             </div>
         </div>
@@ -97,23 +97,22 @@
                     <div class="year-label" style="left: 78%;">2022</div>
                     <div class="year-label" style="left: 95%;">2023</div>
 
-                    <div class="game-poster" style="left: 5%; top: 15%; background-image: url('work/thumbnails/CK2.jpg');" onclick="openWorkDetail('CK2')"><div class="game-label">CK 2</div></div>
-                    <div class="game-poster" style="left: 15%; top: 15%; background-image: url('work/thumbnails/EU4.jpg');" onclick="openWorkDetail('EU4')"><div class="game-label">EU 4</div></div>
-                    <div class="game-poster" style="left: 25%; top: 15%; background-image: url('work/thumbnails/RM.jpg');" onclick="openWorkDetail('RuneMaster')"><div class="game-label">Rune Master</div></div>
+                    <div class="game-poster" style="left: 5%; top: 15%; background-image: url('work/thumbnails/CK2.jpg');" onclick="openWorkDetail('CK2')"><div class="game-label">CK2</div></div>
+                    <div class="game-poster" style="left: 15%; top: 15%; background-image: url('work/thumbnails/HOI4.jpg');" onclick="openWorkDetail('HOI4')"><div class="game-label">HOI4</div></div>
                     
-                    <div class="game-poster" style="left: 44%; top: 15%; background-image: url('work/thumbnails/S&B.jpg');" onclick="openWorkDetail('Skull&Bones')"><div class="game-label">Skull & Bones</div></div>
-                    <div class="game-poster" style="left: 54%; top: 15%; background-image: url('work/thumbnails/ACV.jpg');" onclick="openWorkDetail('ACValhalla')"><div class="game-label">AC Valhalla</div></div>
+                    <div class="game-poster" style="left: 44%; top: 15%; background-image: url('work/thumbnails/S&B.jpg');" onclick="openWorkDetail('S&B')"><div class="game-label">Skull & Bones</div></div>
+                    <div class="game-poster" style="left: 54%; top: 15%; background-image: url('work/thumbnails/ACV.jpg');" onclick="openWorkDetail('ACV')"><div class="game-label">AC Valhalla</div></div>
                     
                     <div class="game-poster" style="left: 78%; top: 15%; background-image: url('work/thumbnails/Fable.jpg');" onclick="openWorkDetail('Fable')"><div class="game-label">Fable</div></div>
 
-                    <div class="game-poster" style="left: 5%; top: 58%; background-image: url('work/thumbnails/HOI4.jpg');" onclick="openWorkDetail('HOI4')"><div class="game-label">HOI 4</div></div>
+                    <div class="game-poster" style="left: 5%; top: 58%; background-image: url('work/thumbnails/EU4.jpg');" onclick="openWorkDetail('EU4')"><div class="game-label">EU4</div></div>
                     <div class="game-poster" style="left: 15%; top: 58%; background-image: url('work/thumbnails/Stellaris.jpg');" onclick="openWorkDetail('Stellaris')"><div class="game-label">Stellaris</div></div>
                     
-                    <div class="game-poster" style="left: 38%; top: 58%; background-image: url('work/thumbnails/SS.jpg');" onclick="openWorkDetail('SuicideSquad')"><div class="game-label">Suicide Squad</div></div>
-                    <div class="game-poster" style="left: 48%; top: 58%; background-image: url('work/thumbnails/OW2.jpg');" onclick="openWorkDetail('OuterWorlds2')"><div class="game-label">Outer Worlds 2</div></div>
-                    <div class="game-poster" style="left: 58%; top: 58%; background-image: url('work/thumbnails/CP2077.jpg');" onclick="openWorkDetail('Cyberpunk2077')"><div class="game-label">Cyberpunk 2077</div></div>
+                    <div class="game-poster" style="left: 38%; top: 58%; background-image: url('work/thumbnails/SS.jpg');" onclick="openWorkDetail('SS')"><div class="game-label">Suicide Squad</div></div>
+                    <div class="game-poster" style="left: 48%; top: 58%; background-image: url('work/thumbnails/Redfall.jpg');" onclick="openWorkDetail('Redfall')"><div class="game-label">Redfall</div></div>
+                    <div class="game-poster" style="left: 58%; top: 58%; background-image: url('work/thumbnails/CP2077.jpg');" onclick="openWorkDetail('CP2077')"><div class="game-label">Cyberpunk</div></div>
                     
-                    <div class="game-poster" style="left: 90%; top: 58%; background-image: url('work/thumbnails/EV.jpg');" onclick="openWorkDetail('EveVanguard')"><div class="game-label">EV</div></div>
+                    <div class="game-poster" style="left: 90%; top: 58%; background-image: url('work/thumbnails/EV.jpg');" onclick="openWorkDetail('EV')"><div class="game-label">Eve Vanguard</div></div>
                 </div>
             </div>
 
@@ -147,22 +146,21 @@
         // ---------------------------------------------------------
         const journalFolders = [
             'Toast',
-            'entry2'
+            'Blowing in the wind'
         ];
 
         const gameData = {
-            'CK2': 'Went from embedded QA to designer over a period of roughly three years. I&apos;ve always loved emergent gameplay systems and working on structured emergent narratives was a dream come true. I was also part of our management meetings, our department strategy and helped with hiring.',
+            'CK2': 'Went from embedded QA to designer over a period of roughly three years. I&apos;ve always loved emergent gameplay systems and working on structured emergent narratives was a dream come true.',
             'HOI4': 'QA from conception to post release.',
-            'Skull&Bones': 'Character artist on 12 of the characters in the official cinematic trailer of the game. Mostly outfits from concept to final over about 6 months',
-            'ACValhalla': 'Cinematic trailer work including layout/shot blocking, environment art for house exteriors and TD tools for procedural meshes.',
-            'Fable': 'Tech artist focused on character tooling. Also did lots of stand alone tooling and shader work.',
-            'EU4': 'QA through the live cycle of EU4. At the time, everyone was part of the dev team and we would always be part of the design meetings to make the game better.',
-            'RuneMaster': 'QA lead on an unannounced turn-based strategy game based on norse mythology.',
-            'Stellaris': 'QA from conception to post release. Provided extra support to our analytics team through SQL.',
-            'SuicideSquad': 'Made characters, environments and helped set up Unreal Engine 5 pipelines for the cinematic reveal trailer of the game.',
-            'OuterWorlds2': 'Cinematic 3D artist. Lots of creative work, coming up with alien plants, sculpting planets, making guns.',
-            'Cyberpunk2077': 'Worked on the cinematic reveal trailer for Phantom Liberty. Didn&apos;t get to spend too much time on the project but got to make some clothing for Idris Elbas character and helped out the TD department with work on our new USD pipeline.',
-            'EveVanguard': 'Worn all the hats through the years on this game. Worked on modular systems like weather, lighting, atmospherics. Led out technical character pipeline. Lots of Houdini tooling for procedural content. From when I joined, our goal was to keep things as close to Epics suggested best practices as possible, so that included working with PCG, world partitioning, level instances etc.'
+            'S&B': 'Contributed to ship material systems and environmental tech art during development.',
+            'ACV': 'Optimized landscape systems and technical standards for high-fidelity Viking environments.',
+            'Fable': 'Engaged in the development of magical VFX pipelines and character tech art.',
+            'EU4': 'Early-career technical support focusing on map asset integration and UI performance.',
+            'Stellaris': 'QA from conception to post release. Provided extra support to our analytics team through SQL',
+            'SS': 'Worked on tech art for the Metropolis environment and hero character shaders.',
+            'Redfall': 'Contributed to stylized atmospheric lighting and vampire disintegration effects.',
+            'CP2077': 'Technical art focus on Night City lighting and advanced material systems.',
+            'EV': 'Planetary shader systems and combat VFX for the EVE universe.'
         };
 
         window.toggleLightbox = (show, imgSrc) => { 
@@ -186,17 +184,6 @@
         window.closeWorkDetail = () => {
             document.getElementById('work-panel').classList.add('hidden');
         };
-
-        // Close work panel on clicking outside
-        document.addEventListener('click', (e) => {
-            const workPanel = document.getElementById('work-panel');
-            if (workPanel && !workPanel.classList.contains('hidden')) {
-                // Check if the click was outside the panel and not on a game poster thumbnail
-                if (!e.target.closest('#work-panel') && !e.target.closest('.game-poster')) {
-                    closeWorkDetail();
-                }
-            }
-        });
 
         let journalLoaded = false;
         async function loadJournalEntries() {
